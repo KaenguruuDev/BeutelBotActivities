@@ -58,11 +58,6 @@ def update_state_loop():
 
 @app.route("/status", methods=["GET"])
 def status():
-    global possible_states, current_state
-    with open("VALUE", "r", encoding="utf-8") as f:
-        possible_states = f.read().split('\n')
-    if current_state == "":
-        current_state = choose_next_state()
     return Response(current_state, mimetype="text/plain")
 
 if __name__ == "__main__":
