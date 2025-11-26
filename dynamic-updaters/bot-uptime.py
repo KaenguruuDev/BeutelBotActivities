@@ -16,5 +16,5 @@ data = res.json()
 
 uptime = data["uptime_percentage"]
 
-with open("../dynamic/UPTIME", "w") as f:
-    f.write(str(uptime))
+with open("dynamic/UPTIME", "w") as f:
+    f.write("Uptime: " + str(uptime) + "%")
