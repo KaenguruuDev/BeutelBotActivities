@@ -2,3 +2,4 @@ dynamic/
 .venv/
 *.env
 VALUE
+.idea/

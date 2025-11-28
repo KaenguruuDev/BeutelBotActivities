@@ -1,20 +1,22 @@
-from flask import Flask, Response
 import random
 import threading
 import time
 import os
 import runpy
 
+from flask import Flask, Response
+
 app = Flask("DiscordStatusServer")
 
 possible_states = []
 current_state = ""
 
+
 def repopulate_states() -> None:
     # Load static texts from VALUE file
     global possible_states
     with open("VALUE", "r", encoding="utf-8") as f:
-        possible_states = f.read().split('\n')
+        possible_states = f.read().split("\n")
 
     # Execute all dynamic updaters from dynamic-updaters/
     for file in os.listdir("dynamic-updaters"):
@@ -33,16 +35,16 @@ def repopulate_states() -> None:
         with open(path, "r", encoding="utf-8") as f:
             lines = f.read().splitlines()
 
-            if len(lines) != 1:
+            if len(lines) != 1 or lines[0] == "":
                 continue
 
             possible_states.append(lines[0])
             print("ADDING DYNAMIC STATE: " + lines[0])
 
 
-
 def choose_next_state() -> str:
     return random.choice(possible_states)
+
 
 def update_state_loop():
     global current_state
@@ -56,9 +58,11 @@ def update_state_loop():
             print("INVALID STATE LIST")
         time.sleep(300)
 
+
 @app.route("/status", methods=["GET"])
 def status():
     return Response(current_state, mimetype="text/plain")
+
 
 if __name__ == "__main__":
     threading.Thread(target=update_state_loop, daemon=True).start()
